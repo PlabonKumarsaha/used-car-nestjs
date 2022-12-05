@@ -11,7 +11,7 @@ export class UserService {
     const user = this.userRepo.create({ email, password });
     return this.userRepo.save(user);
   }
-  findOne(id: number) {
+  async findOne(id: number) {
     return this.userRepo.findOne({
       where: {
         id: id,
@@ -33,5 +33,11 @@ export class UserService {
     Object.assign(user, arrtibs);
     return this.userRepo.save(user);
   }
-  remove() {}
+  async remove(id: number) {
+    const user = await this.findOne(id);
+    if (!user) {
+      throw new Error('User not found!');
+    }
+    return this.userRepo.remove(user);
+  }
 }
