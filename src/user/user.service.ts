@@ -25,6 +25,13 @@ export class UserService {
       },
     });
   }
-  update() {}
+  async update(id: number, arrtibs: Partial<User>) {
+    const user = await this.findOne(id);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    Object.assign(user, arrtibs);
+    return this.userRepo.save(user);
+  }
   remove() {}
 }
