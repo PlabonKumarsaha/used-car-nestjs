@@ -11,6 +11,7 @@ import {
 import { CreateUser } from './dtos/create-user.dto';
 import { UpdateUser } from './dtos/update-user.dto';
 import { UserService } from './user.service';
+import { NotFoundException } from '@nestjs/common';
 
 @Controller('auth')
 export class UserController {
@@ -21,8 +22,13 @@ export class UserController {
   }
 
   @Get('/:id')
-  findUser(@Param('id') id: string) {
-    return this.userService.findOne(parseInt(id));
+  async findUser(@Param('id') id: string) {
+    const user = await this.userService.findOne(parseInt(id));
+    if (!user) {
+      return new NotFoundException('User not found');
+    } else {
+      return user;
+    }
   }
 
   @Get()
