@@ -22,6 +22,7 @@ export class UserController {
     this.userService.create(createUser.email, createUser.password);
   }
 
+  @UseInterceptors(SerializeInterceptor)
   @Get('/:id')
   async findUser(@Param('id') id: string) {
     const user = await this.userService.findOne(parseInt(id));
@@ -36,7 +37,6 @@ export class UserController {
   findAllUser(@Query('email') email: string) {
     return this.userService.find(email);
   }
-  @UseInterceptors(SerializeInterceptor)
   @Delete('/:id')
   deleteUSer(@Param('id') id: string) {
     return this.userService.remove(parseInt(id));
