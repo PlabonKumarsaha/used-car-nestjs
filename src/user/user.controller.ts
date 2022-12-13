@@ -12,10 +12,11 @@ import { CreateUser } from './dtos/create-user.dto';
 import { UpdateUser } from './dtos/update-user.dto';
 import { UserService } from './user.service';
 import { NotFoundException } from '@nestjs/common';
-import { UseInterceptors } from '@nestjs/common/decorators';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
+
 @Controller('auth')
+@Serialize(UserDto)
 export class UserController {
   constructor(private userService: UserService) {}
   @Post('/signup')
@@ -23,7 +24,6 @@ export class UserController {
     this.userService.create(createUser.email, createUser.password);
   }
 
-  @Serialize(UserDto)
   @Get('/:id')
   async findUser(@Param('id') id: string) {
     const user = await this.userService.findOne(parseInt(id));
