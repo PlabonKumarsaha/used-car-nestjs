@@ -12,7 +12,8 @@ import { CreateUser } from './dtos/create-user.dto';
 import { UpdateUser } from './dtos/update-user.dto';
 import { UserService } from './user.service';
 import { NotFoundException } from '@nestjs/common';
-
+import { UseInterceptors } from '@nestjs/common/decorators';
+import { SerializeInterceptor } from 'src/interceptors/serialize.interceptor';
 @Controller('auth')
 export class UserController {
   constructor(private userService: UserService) {}
@@ -35,6 +36,7 @@ export class UserController {
   findAllUser(@Query('email') email: string) {
     return this.userService.find(email);
   }
+  @UseInterceptors(SerializeInterceptor)
   @Delete('/:id')
   deleteUSer(@Param('id') id: string) {
     return this.userService.remove(parseInt(id));
